@@ -7,10 +7,4 @@ Usuario::Usuario(string nombreUser, string password, string rol){
     this->contrasena=password;
     this->rol=rol;
 };
-Usuario::Usuario(){}
-Usuario::Usuario(string nombreUser, string contra, string rol){
-    this->nombreUsuario=nombreUser;
-    this->contrasena=contra;
 
-    this->rol=rol;
-};

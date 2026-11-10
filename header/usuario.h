@@ -13,7 +13,7 @@
     public:
         Usuario();
         Usuario(string nombreUser, string contra, string rol);
-        virtual ~Usuario();
+        virtual ~Usuario() = default;
         bool autenticar(string contrasena);
         virtual bool tienePermiso(string operacion) const = 0;
         virtual string descripcionRol() const = 0;

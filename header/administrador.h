@@ -12,7 +12,7 @@ protected:
 public:
     Administrador();
     Administrador(string nombreUser, string contra, string rol, int nivelAcceso);
-    ~Administrador();
+    virtual ~Administrador() = default;
     bool tienePermiso(string operacion) const override;
     string descripcionRol() const override;
     void gestionarUsuarios();
