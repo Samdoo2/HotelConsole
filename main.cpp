@@ -2,12 +2,7 @@
 #include <string>
 #include <conio.h>
 #include <fstream>
-<<<<<<< HEAD
 #include <sstream>
-=======
-#include "../header/persistencia.h"
-
->>>>>>> 614814c9993c36a942c12b600a7cd1f73eec0df6
 
 using namespace std;
 
@@ -15,7 +10,6 @@ int main() {
     string username, password;
     bool autenticado = false;
 
-<<<<<<< HEAD
     cout << "--- SISTEMA HOTEL CONSOLE ---" << endl;
 
     // Bucle infinito hasta que las credenciales sean correctas
@@ -37,22 +31,6 @@ int main() {
             } else {
                 password.push_back(ch);
                 cout << '*'; 
-=======
-int main(){
-
-    crearArchivoAdministradores();
-
-    string password = "";
-    char ch;
-
-    cout << "Introduce tu contrasena: ";
-
-    while ((ch = _getch()) != '\r') { // '\r' es la tecla Enter en Windows
-        if (ch == '\b') { // Si se presiona Backspace (Borrar)
-            if (!password.empty()) {
-                password.pop_back();
-                std::cout << "\b \b"; // Borra el asterisco de la pantalla
->>>>>>> 614814c9993c36a942c12b600a7cd1f73eec0df6
             }
         }
         cout << endl;
