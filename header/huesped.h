@@ -7,6 +7,7 @@ class ConsumoServicio;
 class Huesped{
     private:
     string documento, telefono, nombre, correo;
+    
     public:
     Huesped();
     Huesped(string documento, string telefono, string nombre, string correo);
