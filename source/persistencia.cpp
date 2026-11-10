@@ -5,27 +5,45 @@
 
 using namespace std;
 
+#include "persistencia.h"
+#include <fstream>
+#include <iostream>
+#include <sstream>
+
+using namespace std;
+
 bool inicializarArchivoAdministradores() {
-    // 1. Intentamos abrirlo en modo lectura para ver si ya existe
+    bool necesitaCreacion = false;
+
+    // 1. Intentamos abrirlo para ver si existe y si tiene contenido
     ifstream in_admin("administradores.csv");
-    if (in_admin.is_open()) {
+    if (!in_admin.is_open()) {
+        necesitaCreacion = true; // El archivo ni siquiera existe
+    } else {
+        // El archivo existe, pero ¿está vacío?
+        // peek() mira el primer caracter. Si es el final del archivo (EOF), está vacío.
+        if (in_admin.peek() == std::ifstream::traits_type::eof()) {
+            necesitaCreacion = true; 
+        }
         in_admin.close();
-        return true; // Ya existe, no hacemos nada para no borrar datos
     }
 
-    // 2. Si no existe, lo creamos (ios::out es por defecto en ofstream)
-    ofstream out_admin("administradores.csv");
-    if (!out_admin.is_open()) {
-        cout << "Error critico: No se pudo crear administradores.csv" << endl;
-        return false;
-    }
+    // 2. Si no existía o estaba vacío, lo reescribimos
+    if (necesitaCreacion) {
+        ofstream out_admin("administradores.csv"); // Esto sobrescribe si estaba vacío
+        if (!out_admin.is_open()) {
+            cout << "Error critico: No se pudo escribir en administradores.csv" << endl;
+            return false;
+        }
 
-    // 3. Escribimos un administrador por defecto para poder entrar la primera vez
-    out_admin << "admin,12345\n";
-    out_admin.close();
+        // Escribimos el administrador por defecto
+        out_admin << "admin,12345\n";
+        out_admin.close();
+    }
     
     return true;
 }
+
 
 bool validarCredenciales(const string& username, const string& password) {
     ifstream in_admin("administradores.csv");
