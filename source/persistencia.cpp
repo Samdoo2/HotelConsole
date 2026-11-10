@@ -1,11 +1,4 @@
-#include "persistencia.h"
-#include <fstream>
-#include <iostream>
-#include <sstream>
-
-using namespace std;
-
-#include "persistencia.h"
+#include "../header/persistencia.h"
 #include <fstream>
 #include <iostream>
 #include <sstream>
