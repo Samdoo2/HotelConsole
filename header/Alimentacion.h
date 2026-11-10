@@ -1,5 +1,5 @@
 #pragma once
-#include "Servicio.h"
+#include "servicio.h"
 #include <string>
 using namespace std;
 

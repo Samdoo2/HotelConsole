@@ -11,7 +11,7 @@ protected:
     int nivelAcceso;
 public:
     Administrador();
-    Administrador(string nombreUser, string contra, string rol, int nivelAcceso):Usuario(nombreUser, contra, rol){this->nivelAcceso=nivelAcceso;};
+    Administrador(string nombreUser, string contra, string rol, int nivelAcceso);
     ~Administrador();
     bool tienePermiso(string operacion) const override;
     string descripcionRol() const override;

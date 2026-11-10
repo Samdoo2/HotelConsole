@@ -1,4 +1,4 @@
-#include "Enumeraciones.h"
+#include "../header/enumeraciones.h"
 #include <stdexcept>
 
 Rol convertirRol(string texto) {
