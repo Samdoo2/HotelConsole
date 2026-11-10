@@ -1,4 +1,4 @@
-#include "ConsumoServicio.h"
+#include "../header/consumoservicio.h"
 #include <stdexcept>
 
 ConsumoServicio::ConsumoServicio() : cantidad(0), precioAplicado(0), valorTotal(0) {}

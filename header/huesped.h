@@ -16,5 +16,10 @@ class Huesped{
     vector <ConsumoServicio*> obtenerServiciosUtilizados();
     string serializar();
     void deserializar(string linea);
+    string Huesped::getDocumento() const;
+string Huesped::getNombre() const;
+string Huesped::getTelefono() const;
+string Huesped::getCorreo() const;
+void Huesped::actualizarDatos(string nuevoNombre, string nuevoTelefono, string nuevoCorreo);
 
 };

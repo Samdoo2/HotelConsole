@@ -15,17 +15,15 @@ protected:
 
 public:
     Servicio();
-    Servicio(string Codigo, string nombre, string desc, double precio, bool activo );
+    Servicio(string codigo, string nombre, string desc, double precio, bool activo );
     
-    double calcularCosto(int cantidad);
+    double calcularCosto(double cantidad);
     string describir();
     void activar();
     void desactivar();
     void validar();
     string serializar();
     void deserializar(string linea);
-
-
 
 };
 

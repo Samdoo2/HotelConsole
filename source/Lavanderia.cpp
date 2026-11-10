@@ -1,6 +1,6 @@
 
-#include "../header2/Servicio.h"
-#include "../header2/Lavanderia.h"
+#include "../header/servicio.h"
+#include "../header/lavanderia.h"
 
 
 

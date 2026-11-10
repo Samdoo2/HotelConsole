@@ -1,11 +1,11 @@
-#include "Huesped.h"
+#include "../header/huesped.h"
 #include <stdexcept>
 
 Huesped::Huesped() {}
 Huesped::Huesped(string documento, string nombre, string telefono, string correo)
     : documento(documento) {
     if (documento.empty()) throw invalid_argument("El documento es obligatorio.");
-    actualizarDatos(nombre, telefono, correo);
+    Huesped::actualizarDatos(nombre, telefono, correo);
 }
 string Huesped::getDocumento() const { return documento; }
 string Huesped::getNombre() const { return nombre; }
