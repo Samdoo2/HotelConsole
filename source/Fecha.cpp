@@ -1,4 +1,4 @@
-#include "../header/fecha.h"
+#include "Fecha.h"
 #include <stdexcept>
 
 bool Fecha::esBisiesto(int anio) {
