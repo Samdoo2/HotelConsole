@@ -1,6 +1,6 @@
 #include "../header/huesped.h"
 #include <stdexcept>
-
+//hola
 Huesped::Huesped() {}
 Huesped::Huesped(string documento, string nombre, string telefono, string correo)
     : documento(documento) {
