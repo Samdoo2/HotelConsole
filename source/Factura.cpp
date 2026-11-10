@@ -1,8 +1,8 @@
 #include "Factura.h"
 #include "Fecha.h"
 #include <stdexcept>
-
-Factura::Factura():valorNoches(0),subtotalServicios(0),impuestos(0),totalPagar(0)estadoPago("Pendiente") {}
+using namespace std;
+Factura::Factura():valorNoches(0),subtotalServicios(0),impuestos(0),totalPagar(0),estadoPago("Pendiente") {}
 Factura::Factura(string codigo, string codigoReserva, string fechaEmision,double valorNoches, double subtotalServicios, double tasaImpuesto)
 :codigo(codigo), codigoReserva(codigoReserva), fechaEmision(fechaEmision),valorNoches(valorNoches),subtotalServicios(subtotalServicios),
 impuestos(0), totalPagar(0), estadoPago("Pendiente") {
