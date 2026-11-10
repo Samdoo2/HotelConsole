@@ -2,27 +2,15 @@
 #include <string>
 #include <conio.h>
 #include <fstream>
+#include "../header/persistencia.h"
+
 
 using namespace std;
 
 
-
-
-
-
 int main(){
 
-    ofstream out_admin("administradores.csv", ios::out);
-    ifstream in_admin("administradores.csv", ios::in);
-
-    if(!out_admin.is_open()){
-        cout << "No se pudo abrir el archivo";
-        return 1;
-    }
-
-
-
-    
+    crearArchivoAdministradores();
 
     string password = "";
     char ch;
