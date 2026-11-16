@@ -11,11 +11,14 @@ protected:
     int nivelAcceso;
 public:
     Administrador();
-    Administrador(string nombreUser, string contra, string rol, int nivelAcceso);
+    Administrador(string nombreUser, string contra, int nivelAcceso);
     virtual ~Administrador() = default;
     bool tienePermiso(string operacion) const override;
     string descripcionRol() const override;
     void gestionarUsuarios();
     void generarReportes();
+
+    int getNivelAcceso();
+
 
 };

@@ -8,11 +8,11 @@
     protected:
         string nombreUsuario;
         string contrasena;
-        string rol;
+        const string rol;
         
     public:
         Usuario();
-        Usuario(string nombreUser, string contra, string rol);
+        Usuario(string nombreUsuario, string contra, const string rol);
         virtual ~Usuario() = default;
         bool autenticar(string contrasena);
         virtual bool tienePermiso(string operacion) const = 0;
@@ -20,6 +20,9 @@
         void validar();
         string serializar();
         void deserializar(string linea);
+
+
         string getNombreUsuario();
+        string getContra();
         string getRol();
     };

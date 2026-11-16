@@ -6,7 +6,8 @@ using namespace std;
 
 
     Administrador::Administrador(){}
-    Administrador::Administrador(string nombreUser, string contra, string rol, int nivelAcceso) : Usuario( nombreUser, contra, rol){this->nivelAcceso=nivelAcceso;}
+    Administrador::Administrador(string nombreUser, string contra, int nivelAcceso) : Usuario( nombreUser, contra, "Admin"){
+        this->nivelAcceso=nivelAcceso;}
 
 
 bool Administrador::tienePermiso(string operacion) const {
@@ -16,3 +17,6 @@ bool Administrador::tienePermiso(string operacion) const {
 string Administrador::descripcionRol() const {
     return "Administrador con nivel de acceso " + to_string(nivelAcceso);
 }
+
+
+int Administrador::getNivelAcceso(){ return nivelAcceso;}

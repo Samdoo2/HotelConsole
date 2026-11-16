@@ -1,10 +1,13 @@
 #include "../header/usuario.h"
 
 
-Usuario::Usuario(){}
-Usuario::Usuario(string nombreUser, string password, string rol){
-    this->nombreUsuario=nombreUser;
-    this->contrasena=password;
-    this->rol=rol;
-};
+Usuario::Usuario(): nombreUsuario(""), contrasena(""), rol("") {}
+Usuario::Usuario(string nombreUsuario, string contrasena, const string rol): 
+nombreUsuario(nombreUsuario), contrasena(contrasena), rol(rol) {}
+
+
+string Usuario::getNombreUsuario(){ return nombreUsuario;}
+string Usuario::getContra(){ return contrasena;}
+string Usuario::getRol(){return rol;}
+
 
