@@ -22,7 +22,7 @@
         void deserializar(string linea);
 
 
-        string getNombreUsuario();
-        string getContra();
-        string getRol();
+        string getNombreUsuario() const;
+        string getContra() const;
+        string getRol() const;
     };

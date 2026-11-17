@@ -12,4 +12,7 @@ bool inicializarArchivoAdministradores();
 // Busca en el CSV si el usuario y la contraseña coinciden.
 bool validarCredenciales(const string &username, const string &password, string& rolOut);
 
+
+
+
 #endif
