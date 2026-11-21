@@ -1,18 +1,15 @@
-
-
-#ifndef PERSISTENCIA_H
-#define PERSISTENCIA_H
-
+#pragma once
 #include <string>
 using namespace std;
 
-// Verifica si el archivo existe. Si no, lo crea con un admin por defecto.
+// Crea la carpeta y el CSV con un administrador si no existe o esta vacio.
 bool inicializarArchivoAdministradores();
 
-// Busca en el CSV si el usuario y la contraseña coinciden.
-bool validarCredenciales(const string &username, const string &password, string& rolOut);
+// Verifica credenciales y devuelve el rol guardado por referencia.
+bool validarCredenciales(const string& username, const string& password,
+                        string& rolOut, string& datoExtraOut);
 
-
-
-
-#endif
+// Crea un usuario persistente. Rechaza datos invalidos y nombres duplicados.
+// El cuarto dato es el nivel (Administrador) o turno (Recepcionista).
+void registrarUsuario(const string& username, const string& password,
+                     const string& rol, const string& datoExtra);

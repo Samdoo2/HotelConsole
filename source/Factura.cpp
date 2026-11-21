@@ -1,5 +1,5 @@
-#include "../header/factura.h"
-#include "../header/fecha.h"
+#include "../header/Factura.h"
+#include "../header/Fecha.h"
 #include <stdexcept>
 using namespace std;
 Factura::Factura():valorNoches(0),subtotalServicios(0),impuestos(0),totalPagar(0),estadoPago("Pendiente") {}

@@ -1,8 +1,9 @@
+#include "../header/Servicio.h"
+#include "../header/Lavanderia.h"
 
-#include "../header/servicio.h"
-#include "../header/lavanderia.h"
 
 
+Lavanderia::Lavanderia() : Servicio(), recargoUrgente(0), urgente(false) {}
 
 Lavanderia::Lavanderia(string codigo, string nombre, string desc, double precio, bool activo, double recargoUrgente, bool urgente) : Servicio(codigo, nombre, desc, precio, activo){
         this->recargoUrgente=recargoUrgente;

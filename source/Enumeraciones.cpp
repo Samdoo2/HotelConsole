@@ -1,8 +1,8 @@
-#include "../header/enumeraciones.h"
+#include "../header/Enumeraciones.h"
 #include <stdexcept>
 
 Rol convertirRol(string texto) {
-    if (texto == "Administrador") return Rol::Administrador;
+    if (texto == "Administrador" || texto == "Admin") return Rol::Administrador;
     if (texto == "Recepcionista") return Rol::Recepcionista;
     throw invalid_argument("Rol de usuario invalido.");
 }

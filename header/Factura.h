@@ -1,6 +1,6 @@
 #pragma once
 #include <string>
-#include "enumeraciones.h"
+#include "Enumeraciones.h"
 using namespace std;
 
 class Factura {

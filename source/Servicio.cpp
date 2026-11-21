@@ -1,8 +1,8 @@
-#include "../header/servicio.h"
+#include "../header/Servicio.h"
 
 using namespace std;
 
-Servicio::Servicio(){}
+Servicio::Servicio() : precio(0), activo(false) {}
 Servicio::Servicio(string codigo, string nombre, string desc, double precio, bool activo){
     this->codigo=codigo;
     this->nombre=nombre;
@@ -10,6 +10,3 @@ Servicio::Servicio(string codigo, string nombre, string desc, double precio, boo
     this->precio=precio;
     this->activo=activo;
 }
-
-
-

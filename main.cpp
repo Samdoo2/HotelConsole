@@ -1,7 +1,10 @@
-#include <cstddef>
 #include <iostream>
 #include <string>
-#include <conio.h>
+#include <exception>
+
+#ifdef _WIN32
+#include <conio.h> // _getch() existe en Windows.
+#endif
 
 #include "header/administrador.h"
 #include "header/recepcionista.h"
@@ -11,58 +14,72 @@
 
 using namespace std;
 
+// En Windows oculta los caracteres de la contrasena.
+// En otros sistemas usa getline para que tambien pueda compilarse.
+string leerContrasena() {
+#ifdef _WIN32
+    string password;
+    int tecla;
+    while ((tecla = _getch()) != 13) { // Enter
+        if (tecla == 8) {               // Retroceso
+            if (!password.empty()) {
+                password.pop_back();
+                cout << "\b \b";
+            }
+        } else if (tecla >= 32 && tecla <= 126) {
+            password += static_cast<char>(tecla);
+            cout << '*';
+        }
+    }
+    cout << endl;
+    return password;
+#else
+    string password;
+    getline(cin, password);
+    return password;
+#endif
+}
+
 int main() {
-    // Verificamos o creamos la base de datos de admins antes de arrancar
-    if (!inicializarArchivoAdministradores()) {
-        return 1; // Terminamos el programa si hay un fallo de disco
-    }
+    try {
+        if (!inicializarArchivoAdministradores()) return 1;
 
-    string username, password, rol;
-    bool autenticado = false;
+        cout << "--- SISTEMA HOTEL CONSOLE ---" << endl;
+        string username, password, rol, datoExtra;
 
-    cout << "--- SISTEMA HOTEL CONSOLE ---" << endl;
+        while (true) {
+            cout << "Usuario: ";
+            if (!getline(cin, username)) return 0;
+            cout << "Contrasena: ";
+            password = leerContrasena();
+            if (!cin) return 0;
 
-    while (!autenticado) {
-        cout << "Usuario: ";
-        cin >> username;
-        
-        cout << "Contrasena: ";
-        password = ""; 
-        char ch;
-        
-        while ((ch = _getch()) != '\r') {
-            if (ch == '\b') { 
-                if (!password.empty()) {
-                    password.pop_back();
-                    cout << "\b \b";
-                }
+            if (!validarCredenciales(username, password, rol, datoExtra)) {
+                cout << "Credenciales incorrectas. Intente de nuevo.\n" << endl;
+                continue;
+            }
+
+            // Un mismo rol en todas las clases. Compatibilidad con CSV antiguos: Admin.
+            if (rol == "Admin") rol = "Administrador";
+
+            if (rol == "Administrador") {
+                Administrador usuarioActual(username, password, stoi(datoExtra));
+                menuPrincipal(usuarioActual);
+            } else if (rol == "Recepcionista") {
+                Recepcionista usuarioActual(username, password, datoExtra);
+                menuPrincipal(usuarioActual);
             } else {
-                password.push_back(ch);
-                cout << '*'; 
+                cout << "Error: el rol '" << rol
+                     << "' no es reconocido. Consulta al administrador." << endl;
+                return 1;
             }
+            return 0; // Sesion cerrada correctamente.
         }
-        cout << endl;
-
-        if (validarCredenciales(username, password, rol)) {
-
-            Usuario* usuarioActual = nullptr;
-            if (rol == "Admin"){
-                usuarioActual = new Administrador(username, password, 1);
-
-            }else if(rol == "Recepcionista"){
-                usuarioActual = new Recepcionista(username, password, "Diurno");
-            }
-
-            if(usuarioActual != nullptr){
-                menuPrincipal(*usuarioActual);
-                delete usuarioActual;
-            }
-            
-            autenticado = true;
-        } else {
-         cout << "Credenciales incorrectas. Intente de nuevo.\n" << endl;
-        }
+    } catch (const exception& e) {
+        cerr << "Error del sistema: " << e.what() << endl;
+        return 1;
     }
+}
 
 
 
