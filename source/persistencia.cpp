@@ -8,7 +8,7 @@
 #include <stdexcept>
 
 using namespace std;
-namespace fs = std::filesystem;
+namespace fs = filesystem;
 
 // Resuelve siempre el archivo en la carpeta Persistencia del proyecto.
 // Con CMake se conoce la ruta real incluso desde la carpeta build/.

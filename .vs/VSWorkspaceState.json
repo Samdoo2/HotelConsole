@@ -1,0 +1,18 @@
+{
+  "OutputFoldersPerTargetSystem": {
+    "Local Machine": [
+      "out\\build\\msvc-x64-debug",
+      "out\\build\\GCC 15.2.0 x86_64-w64-mingw32 (ucrt64)",
+      "out\\install\\GCC 15.2.0 x86_64-w64-mingw32 (ucrt64)"
+    ]
+  },
+  "ExpandedNodes": [
+    "",
+    "\\header",
+    "\\out",
+    "\\Persistencia",
+    "\\source"
+  ],
+  "SelectedNode": "\\CMakeLists.txt",
+  "PreviewInSolutionExplorer": false
+}
