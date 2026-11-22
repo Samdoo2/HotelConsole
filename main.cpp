@@ -2,9 +2,7 @@
 #include <string>
 #include <exception>
 
-#ifdef _WIN32
-#include <conio.h> // _getch() existe en Windows.
-#endif
+#include <conio.h> // Oculta la contrasena durante el inicio de sesion.
 
 #include "header/administrador.h"
 #include "header/recepcionista.h"
@@ -14,10 +12,8 @@
 
 using namespace std;
 
-// En Windows oculta los caracteres de la contrasena.
-// En otros sistemas usa getline para que tambien pueda compilarse.
+// Lee la contrasena y muestra asteriscos en lugar de los caracteres.
 string leerContrasena() {
-#ifdef _WIN32
     string password;
     int tecla;
     while ((tecla = _getch()) != 13) { // Enter
@@ -33,11 +29,6 @@ string leerContrasena() {
     }
     cout << endl;
     return password;
-#else
-    string password;
-    getline(cin, password);
-    return password;
-#endif
 }
 
 int main() {
@@ -80,7 +71,6 @@ int main() {
         return 1;
     }
 }
-
 
 
 
