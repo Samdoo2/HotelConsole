@@ -1,9 +1,7 @@
 #pragma once
+#include "fecha.h"
 #include <string>
 using namespace std;
-class Fecha;
-class Huesped;
-class Habitacion;
 class Reserva{
     private:
     string fecha, hora, estado;
