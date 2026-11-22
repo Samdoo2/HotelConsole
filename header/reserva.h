@@ -1,22 +1,16 @@
 #pragma once
+#include "fecha.h"
 #include <string>
 #include "Enumeraciones.h"
 using namespace std;
+class Fecha;
+class Huesped;
+class Habitacion;
+class Reserva{
+    private:
+    string fecha, hora, estado;
 
-// Cada objeto corresponde a UNA habitacion dentro de un grupo de reserva.
-// Varias reservas pueden compartir codigoGrupo y documentoTitular.
-class Reserva {
-private:
-    string codigo;           // Ejemplo: R001-1 (detalle unico).
-    string codigoGrupo;      // Ejemplo: R001 (la reserva completa).
-    string documentoTitular; // Una sola persona responde por el grupo.
-    string codigoHabitacion;
-    string fechaEntrada;
-    string fechaSalida;
-    int personas;
-    double tarifaPorNoche;   // Queda guardada al momento de la reserva.
-    EstadoReserva estado;
-public:
+    public:
     Reserva();
     Reserva(string codigo, string codigoGrupo, string documentoTitular,
             string codigoHabitacion, string fechaEntrada, string fechaSalida,
