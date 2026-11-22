@@ -1,17 +1,24 @@
 #pragma once
-#include "Servicio.h"
+
+#include "servicio.h"
 #include <string>
 using namespace std;
 
 class Alimentacion : public Servicio {
-    private:
+private:
     string tipoComida;
+
 public:
     Alimentacion();
-    Alimentacion(string codigo, string nombre, string descripcion, double precio,bool activo, string tipoComida);
+    Alimentacion(string codigo, string nombre, string descripcion,
+                 double precio, bool activo, string tipoComida);
 
     string getTipoComida() const;
     string getUnidadCobro() const;
-    string describir() const;
-    double calcularCosto(int cantidad) const;
+
+    string getTipoServicio() const override;
+    string describir() const override;
+    double calcularCosto(int cantidad) const override;
+    string serializar() const override;
+    void deserializar(const string& linea);
 };
