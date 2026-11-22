@@ -1,5 +1,5 @@
 #pragma once
-#include "fecha.h"
+#include "Fecha.h"
 #include <string>
 #include "Enumeraciones.h"
 using namespace std;
@@ -8,7 +8,15 @@ class Huesped;
 class Habitacion;
 class Reserva{
     private:
-    string fecha, hora, estado;
+    string codigo;
+    string codigoGrupo;
+    string documentoTitular;
+    string codigoHabitacion;
+    string fechaEntrada;
+    string fechaSalida;
+    int personas;
+    double tarifaPorNoche;
+    EstadoReserva estado;
 
     public:
     Reserva();
