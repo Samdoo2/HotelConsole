@@ -4,6 +4,7 @@
 #include "../header/persistencia.h"
 
 #include <iostream>
+#include <iomanip>
 #include <sstream>
 #include <stdexcept>
 #include <string>
@@ -42,6 +43,21 @@ static void anunciarModulo(const Usuario& user, const string& permiso,
     cout << "Esta funcion se conectara en los siguientes bloques." << endl;
 }
 
+// Consulta inventario: aun no crea reservas ni valida fechas.
+static void mostrarInventario() {
+    vector<Habitacion> habitaciones = cargarHabitaciones();
+    cout << "\n=== INVENTARIO DE HABITACIONES ===\n";
+    cout << "Habitaciones registradas: " << habitaciones.size() << '\n';
+    for (const Habitacion& h : habitaciones) {
+        cout << "Habitacion " << h.getCodigo()
+             << " | " << Habitacion::nombreTipo(h.getTipo())
+             << " | Capacidad: " << h.getCapacidad()
+             << " | $" << fixed << setprecision(0) << h.getPrecioPorNoche()
+             << " / noche | " << Habitacion::nombreEstado(h.getEstado()) << '\n';
+    }
+    cout << "La disponibilidad POR FECHAS se comprobara en el bloque Reserva.\n";
+}
+
 void menuPrincipal(const Usuario& user) {
     cout << "\nBienvenido, " << user.descripcionRol() << endl;
     const bool administrador = user.getRol() == "Administrador";
@@ -51,12 +67,19 @@ void menuPrincipal(const Usuario& user) {
         return;
     }
 
+    // Inicializa el inventario automaticamente al entrar al sistema.
+    // Si habitaciones.csv ya contiene datos, NO crea habitaciones duplicadas.
+    if (!inicializarArchivoHabitaciones()) {
+        cout << "No se pudo preparar el inventario de habitaciones." << endl;
+        return;
+    }
+
     int opcion;
     do {
         cout << "\n=== MENU PRINCIPAL - "
              << (administrador ? "ADMINISTRADOR" : "RECEPCIONISTA") << " ===\n";
         if (administrador) cout << "1. Opciones de administrador\n";
-        cout << "2. Reservas y Habitaciones (pendiente)\n"
+        cout << "2. Reservas y Habitaciones\n"
              << "3. Gestion de Huespedes (pendiente)\n"
              << "4. Registrar Consumos (Restaurante/Lavanderia)\n"
              << "5. Facturacion y Check-out\n"
@@ -67,7 +90,13 @@ void menuPrincipal(const Usuario& user) {
                 if (administrador && user.tienePermiso("usuarios")) menuAdmin(user);
                 else cout << "Opcion no permitida." << endl;
                 break;
-            case 2: anunciarModulo(user, "reservas", "Reservas y Habitaciones"); break;
+            case 2:
+                if (user.tienePermiso("reservas")) {
+                    try { mostrarInventario(); }
+                    catch (const exception& e) { cout << "Error: " << e.what() << endl; }
+                }
+                else cout << "Acceso denegado." << endl;
+                break;
             case 3: anunciarModulo(user, "huespedes", "Huespedes"); break;
             case 4: anunciarModulo(user, "consumos", "Consumos"); break;
             case 5: anunciarModulo(user, "facturacion", "Facturacion y Check-out"); break;
@@ -85,14 +114,20 @@ void menuAdmin(const Usuario& user) {
     do {
         cout << "\n=== OPCIONES DE ADMINISTRADOR ===\n"
              << "1. Gestion de Usuarios\n"
-             << "2. Reservas y Habitaciones (pendiente)\n"
+             << "2. Reservas y Habitaciones\n"
              << "3. Gestion de Huespedes (pendiente)\n"
              << "4. Gestion de Servicios\n"
              << "0. Volver al menu principal\n";
         opcion = leerOpcion();
         switch (opcion) {
             case 1: menuGestionUsuarios(); break; // Ahora SI se llama la funcion.
-            case 2: anunciarModulo(user, "reservas", "Reservas y Habitaciones"); break;
+            case 2:
+                if (user.tienePermiso("reservas")) {
+                    try { mostrarInventario(); }
+                    catch (const exception& e) { cout << "Error: " << e.what() << endl; }
+                }
+                else cout << "Acceso denegado." << endl;
+                break;
             case 3: anunciarModulo(user, "huespedes", "Huespedes"); break;
             case 4: anunciarModulo(user, "servicios_gestion", "Servicios"); break;
             case 0: cout << "Regresando al menu principal." << endl; break;
