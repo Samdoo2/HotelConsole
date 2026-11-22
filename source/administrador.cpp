@@ -1,21 +1,15 @@
 #include "../header/administrador.h"
-#include <stdexcept>
 using namespace std;
 
-Administrador::Administrador() : Usuario("", "", "Administrador"), nivelAcceso(1) {}
+Administrador::Administrador() : Usuario("", "", "Administrador") {}
 
-Administrador::Administrador(string nombreUser, string contra, int nivelAcceso)
-    : Usuario(nombreUser, contra, "Administrador"), nivelAcceso(nivelAcceso) {
-    if (nivelAcceso <= 0)
-        throw invalid_argument("El nivel de acceso debe ser mayor a cero.");
-}
+Administrador::Administrador(string nombreUser, string contra)
+    : Usuario(nombreUser, contra, "Administrador") {}
 
 bool Administrador::tienePermiso(string operacion) const {
-    return true; // El administrador puede realizar todas las operaciones.
+    return true; // El rol Administrador tiene permisos completos.
 }
 
 string Administrador::descripcionRol() const {
-    return "Administrador con nivel de acceso " + to_string(nivelAcceso);
+    return "Administrador";
 }
-
-int Administrador::getNivelAcceso() { return nivelAcceso; }

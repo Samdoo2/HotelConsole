@@ -45,9 +45,9 @@ bool inicializarArchivoAdministradores() {
             cerr << "Error critico: no se pudo crear usuarios.csv" << endl;
             return false;
         }
-        Administrador admin("admin", "12345", 1);
+        Administrador admin("admin", "12345");
         salida << admin.getNombreUsuario() << ',' << admin.getContra() << ','
-               << admin.getRol() << ',' << admin.getNivelAcceso() << '\n';
+               << admin.getRol() << '\n';
         salida.flush();
         if (!salida) {
             cerr << "Error critico: no se pudo escribir usuarios.csv" << endl;
@@ -69,12 +69,18 @@ bool validarCredenciales(const string& username, const string& password,
     while (getline(entrada, linea)) {
         stringstream ss(linea);
         string csvUser, csvPass, csvRol, csvDato;
+        // Acepta 3 campos para Administrador y 4 para Recepcionista.
+        // Tambien puede leer administradores antiguos con 4 campos (nivel).
         if (!getline(ss, csvUser, ',') || !getline(ss, csvPass, ',') ||
-            !getline(ss, csvRol, ',') || !getline(ss, csvDato)) continue;
+            !getline(ss, csvRol, ',')) continue;
+        getline(ss, csvDato); // Puede no existir en el formato nuevo de admin.
+        if (!csvRol.empty() && csvRol.back() == '\r') csvRol.pop_back();
         if (!csvDato.empty() && csvDato.back() == '\r') csvDato.pop_back();
-        if (csvUser == username && csvPass == password) {
-            rolOut = rolNormalizado(csvRol);
-            datoExtraOut = csvDato;
+        const string rolLeido = rolNormalizado(csvRol);
+        if (csvUser == username && csvPass == password &&
+            (rolLeido == "Administrador" || rolLeido == "Recepcionista")) {
+            rolOut = rolLeido;
+            datoExtraOut = rolLeido == "Recepcionista" ? csvDato : "";
             return true;
         }
     }
@@ -83,17 +89,12 @@ bool validarCredenciales(const string& username, const string& password,
 
 void registrarUsuario(const string& username, const string& password,
                      const string& rol, const string& datoExtra) {
-    if (!campoValido(username) || !campoValido(password) || !campoValido(datoExtra))
-        throw invalid_argument("No se permiten campos vacios, comas ni saltos de linea.");
+    if (!campoValido(username) || !campoValido(password))
+        throw invalid_argument("Nombre y contrasena no pueden estar vacios ni tener comas.");
     if (rol != "Administrador" && rol != "Recepcionista")
         throw invalid_argument("Tipo de usuario invalido.");
-
-    if (rol == "Administrador") {
-        istringstream num(datoExtra);
-        int nivel; char sobra;
-        if (!(num >> nivel) || nivel <= 0 || (num >> sobra))
-            throw invalid_argument("El nivel de acceso debe ser un entero mayor a 0.");
-    }
+    if (rol == "Recepcionista" && !campoValido(datoExtra))
+        throw invalid_argument("El turno es obligatorio y no debe tener comas.");
 
     ifstream entrada(rutaUsuarios());
     if (!entrada.is_open()) throw runtime_error("No se puede leer usuarios.csv.");
@@ -108,7 +109,10 @@ void registrarUsuario(const string& username, const string& password,
 
     ofstream salida(rutaUsuarios(), ios::app);
     if (!salida.is_open()) throw runtime_error("No se puede abrir usuarios.csv para guardar.");
-    salida << username << ',' << password << ',' << rol << ',' << datoExtra << '\n';
+    // Se elimina el cuarto campo para administradores.
+    salida << username << ',' << password << ',' << rol;
+    if (rol == "Recepcionista") salida << ',' << datoExtra;
+    salida << '\n';
     salida.flush();
     if (!salida) throw runtime_error("No se pudo guardar el usuario.");
 }

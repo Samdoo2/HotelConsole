@@ -63,7 +63,7 @@ int main() {
             if (rol == "Admin") rol = "Administrador";
 
             if (rol == "Administrador") {
-                Administrador usuarioActual(username, password, stoi(datoExtra));
+                Administrador usuarioActual(username, password);
                 menuPrincipal(usuarioActual);
             } else if (rol == "Recepcionista") {
                 Recepcionista usuarioActual(username, password, datoExtra);

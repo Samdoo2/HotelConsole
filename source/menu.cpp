@@ -56,8 +56,8 @@ void menuPrincipal(const Usuario& user) {
         cout << "\n=== MENU PRINCIPAL - "
              << (administrador ? "ADMINISTRADOR" : "RECEPCIONISTA") << " ===\n";
         if (administrador) cout << "1. Opciones de administrador\n";
-        cout << "2. Gestion de Habitaciones\n"
-             << "3. Gestion de Huespedes y Reservas\n"
+        cout << "2. Reservas y Habitaciones (pendiente)\n"
+             << "3. Gestion de Huespedes (pendiente)\n"
              << "4. Registrar Consumos (Restaurante/Lavanderia)\n"
              << "5. Facturacion y Check-out\n"
              << "0. Cerrar sesion\n";
@@ -67,9 +67,8 @@ void menuPrincipal(const Usuario& user) {
                 if (administrador && user.tienePermiso("usuarios")) menuAdmin(user);
                 else cout << "Opcion no permitida." << endl;
                 break;
-            case 2: anunciarModulo(user, administrador ? "habitaciones_gestion" :
-                                  "habitaciones_consultar", "Habitaciones"); break;
-            case 3: anunciarModulo(user, "reservas", "Huespedes y Reservas"); break;
+            case 2: anunciarModulo(user, "reservas", "Reservas y Habitaciones"); break;
+            case 3: anunciarModulo(user, "huespedes", "Huespedes"); break;
             case 4: anunciarModulo(user, "consumos", "Consumos"); break;
             case 5: anunciarModulo(user, "facturacion", "Facturacion y Check-out"); break;
             case 0: cout << "Cerrando sesion..." << endl; break;
@@ -86,15 +85,15 @@ void menuAdmin(const Usuario& user) {
     do {
         cout << "\n=== OPCIONES DE ADMINISTRADOR ===\n"
              << "1. Gestion de Usuarios\n"
-             << "2. Gestion de Habitaciones\n"
-             << "3. Gestion de Huespedes y Reservas\n"
+             << "2. Reservas y Habitaciones (pendiente)\n"
+             << "3. Gestion de Huespedes (pendiente)\n"
              << "4. Gestion de Servicios\n"
              << "0. Volver al menu principal\n";
         opcion = leerOpcion();
         switch (opcion) {
             case 1: menuGestionUsuarios(); break; // Ahora SI se llama la funcion.
-            case 2: anunciarModulo(user, "habitaciones_gestion", "Habitaciones"); break;
-            case 3: anunciarModulo(user, "reservas", "Huespedes y Reservas"); break;
+            case 2: anunciarModulo(user, "reservas", "Reservas y Habitaciones"); break;
+            case 3: anunciarModulo(user, "huespedes", "Huespedes"); break;
             case 4: anunciarModulo(user, "servicios_gestion", "Servicios"); break;
             case 0: cout << "Regresando al menu principal." << endl; break;
             default: cout << "Opcion no valida." << endl;
@@ -120,9 +119,8 @@ void menuGestionUsuarios() {
                     string tipo = leerCampo("Tipo (Administrador/Recepcionista): ");
                     string extra;
                     if (tipo == "Administrador") {
-                        extra = leerCampo("Nivel de acceso (entero mayor a 0): ");
-                        // El metodo de persistencia valida el nivel y los duplicados.
-                        Administrador usuarioNuevo(nombre, contrasena, 1);
+                        // No se solicita nivel: el rol determina los permisos.
+                        Administrador usuarioNuevo(nombre, contrasena);
                     } else if (tipo == "Recepcionista") {
                         extra = leerCampo("Turno: ");
                         Recepcionista usuarioNuevo(nombre, contrasena, extra);
