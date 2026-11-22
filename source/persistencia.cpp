@@ -6,6 +6,7 @@
 #include <iostream>
 #include <sstream>
 #include <stdexcept>
+#include <unordered_set>
 
 using namespace std;
 namespace fs = filesystem;
@@ -115,4 +116,99 @@ void registrarUsuario(const string& username, const string& password,
     salida << '\n';
     salida.flush();
     if (!salida) throw runtime_error("No se pudo guardar el usuario.");
+}
+
+
+// Mismo directorio que usuarios.csv. Asi Code Runner y CMake
+// respetan las rutas ya corregidas en el Bloque 0.
+static fs::path rutaHabitaciones() {
+    return rutaUsuarios().parent_path() / "habitaciones.csv";
+}
+
+void guardarHabitaciones(const vector<Habitacion>& habitaciones) {
+    const fs::path ruta = rutaHabitaciones();
+    fs::create_directories(ruta.parent_path());
+
+    // Revisar todos los registros antes de truncar el archivo existente.
+    unordered_set<string> codigos;
+    for (const Habitacion& h : habitaciones) {
+        h.serializar(); // Verifica sus atributos antes de guardar.
+        if (!codigos.insert(h.getCodigo()).second)
+            throw invalid_argument("Hay codigos de habitacion duplicados.");
+    }
+
+    ofstream archivo(ruta, ios::trunc);
+    if (!archivo.is_open())
+        throw runtime_error("No se pudo abrir habitaciones.csv para escribir.");
+
+    for (const Habitacion& h : habitaciones)
+        archivo << h.serializar() << '\n';
+
+    archivo.flush();
+    if (!archivo)
+        throw runtime_error("No se pudo guardar habitaciones.csv.");
+}
+
+vector<Habitacion> cargarHabitaciones() {
+    ifstream archivo(rutaHabitaciones());
+    if (!archivo.is_open())
+        throw runtime_error("No se pudo abrir habitaciones.csv para leer.");
+
+    vector<Habitacion> habitaciones;
+    unordered_set<string> codigos;
+    string linea;
+    int numeroLinea = 0;
+    while (getline(archivo, linea)) {
+        ++numeroLinea;
+        if (!linea.empty() && linea.back() == '\r') linea.pop_back();
+        if (linea.empty()) continue;
+        try {
+            Habitacion h = Habitacion::deserializar(linea);
+            if (!codigos.insert(h.getCodigo()).second)
+                throw invalid_argument("Codigo de habitacion repetido.");
+            habitaciones.push_back(h);
+        } catch (const exception& e) {
+            throw runtime_error("habitaciones.csv, linea " +
+                                to_string(numeroLinea) + ": " + e.what());
+        }
+    }
+    if (archivo.bad())
+        throw runtime_error("Error al leer habitaciones.csv.");
+    return habitaciones;
+}
+
+bool inicializarArchivoHabitaciones() {
+    try {
+        const fs::path ruta = rutaHabitaciones();
+        fs::create_directories(ruta.parent_path());
+
+        // No reemplazar datos creados ni cambios guardados.
+        if (fs::exists(ruta) && fs::file_size(ruta) > 0) {
+            cargarHabitaciones(); // Comprueba que el CSV existente es valido.
+            return true;
+        }
+
+        // Datos predeterminados del hotel para las primeras pruebas.
+        vector<Habitacion> habitaciones = {
+            Habitacion("101", TipoHabitacion::Sencilla, 1, 100000),
+            Habitacion("102", TipoHabitacion::Sencilla, 1, 100000),
+            Habitacion("103", TipoHabitacion::Sencilla, 1, 105000),
+            Habitacion("104", TipoHabitacion::Sencilla, 1, 105000),
+            Habitacion("105", TipoHabitacion::Doble, 2, 155000),
+            Habitacion("106", TipoHabitacion::Doble, 2, 155000),
+            Habitacion("107", TipoHabitacion::Doble, 2, 165000),
+            Habitacion("108", TipoHabitacion::Doble, 2, 165000),
+            Habitacion("201", TipoHabitacion::Familiar, 4, 250000),
+            Habitacion("202", TipoHabitacion::Familiar, 4, 250000,
+                      EstadoHabitacion::FueraDeServicio),
+            Habitacion("203", TipoHabitacion::Suite, 2, 350000),
+            Habitacion("204", TipoHabitacion::Suite, 2, 350000,
+                      EstadoHabitacion::Mantenimiento)
+        };
+        guardarHabitaciones(habitaciones);
+        return true;
+    } catch (const exception& e) {
+        cerr << "Error al inicializar habitaciones: " << e.what() << endl;
+        return false;
+    }
 }
